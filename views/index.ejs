@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title><%= title %></title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+
+        <!-- HEADER: NAV BAR -->
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">
+            <img alt="FiscalNote" src="images/fn.png" id="fn-brand">
+          </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+          <!-- Left nav -->
+          <ul class="nav navbar-nav">
+            <li id='nav-tab-home'><a href="#">Home</a></li>
+            <li class="active" id='nav-tab-fiscalnoters'><a href="#">FiscalNoters</a></li>
+            <li id='nav-tab-stats'><a href="#">Stats</a></li>
+            <li id='nav-tab-matches'><a href="#">Matches</a></li>
+          </ul>
+
+          <!-- nav search -->
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+
+          <!-- Right nav -->
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <%= name %> <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Account</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+
+        </div> <!-- /.navbar-collapse -->
+        <!-- END HEADER -->
+
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <!-- FISCALNOTERS: ALL USERS TABLE -->
+    <div class="container-fluid hidden" id="all-users-container">
+      <div class="row" id="all-users-row">
+        <div class="col-12-xs col-sm-10 col-sm-offset-1" id="all-users-col">
+          <div class="table">
+            <table class="table table-condensed table-hover table-bordered" id="all-users-table">
+              <thead id="all-users-table-header">
+                <tr> <!-- name: "ascending, descending, none" -->
+                  <th class="all-users-table-header-col" id="firstname" name="ascending"><strong>First Name</strong></th>
+                  <th class="all-users-table-header-col" id="lastname" name="none"><strong>Last Name</strong></th>
+                  <th class="all-users-table-header-col" id="startdate" name="none"><strong>Start Date</strong></th>
+                  <th class="all-users-table-header-col" id="birthday" name="none"><strong>Birthday</strong></th>
+                  <th class="all-users-table-header-col" id="email" name="none"><strong>Email</strong></th>
+                  <th class="all-users-table-header-col" id="phone" name="none"><strong>Phone</strong></th>
+                  <th class="all-users-table-header-col" id="education" name="none"><strong>Education</strong></th>
+                  <th class="all-users-table-header-col" id="sex" name="none"><strong>Sex</strong></th>
+                  <th class="all-users-table-header-col" id="position" name="none"><strong>Position</strong></th>
+                  <th class="all-users-table-header-col" id="fngroupid" name="none"><strong>Group</strong></th>
+                  <th class="all-users-table-header-col" id="department" name="none"><strong>Department</strong></th>
+                  <th class="all-users-table-header-col" id="employement" name="none"><strong>Employement</strong></th>
+                  <th class="all-users-table-header-col" id="office" name="none"><strong>Office</strong></th>
+                  <th class="all-users-table-header-col" id="extention" name="none"><strong>Extention</strong></th>
+                </tr>
+              </thead>
+              <!-- data will dynamically be added in here -->
+              <tbody id="all-users-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ALL USERS TABLE -->
+
+    <!-- USER: Single User Information -->
+    <div class="container hidden" id="user-container">
+      <div class="row" id="user-row">
+        <div class="col-12-xs col-sm-4 col-md-3" id="user-col-left">
+          <!-- Insert content here -->
+        </div>
+        <div class="col-12-xs col-sm-8 col-md-9" id="user-col-right">
+          <div class="row">
+            <div class="col-10-xs col-sm-11" id="user-col-right-name">
+            </div>
+            <div class="col-2-xs col-sm-1" id="user-col-right-back">
+              <button class="btn btn-info pull-right">Back</button>
+            </div>
+          </div>
+          <!-- Insert content here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Include JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/index.js"></script>
+  </body>
+</html>

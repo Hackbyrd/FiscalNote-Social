@@ -1,0 +1,19 @@
+body {
+  padding-top: 75px;
+}
+
+.navbar-brand {
+  padding: 5px;
+}
+
+#fn-brand {
+  height: 40px;
+}
+
+.all-users-table-header-col {
+  cursor: pointer;
+}
+
+.all-users-table-header-col:hover {
+  color: purple;
+}
