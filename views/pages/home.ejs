@@ -1,0 +1,35 @@
+<% layout('layouts/layout') -%>
+
+<!-- FISCALNOTERS: ALL USERS TABLE -->
+<div class="container-fluid" id="all-users-container">
+  <div class="row" id="all-users-row">
+    <div class="col-12-xs col-sm-10 col-sm-offset-1" id="all-users-col">
+      <div class="table">
+        <table class="table table-condensed table-hover table-bordered" id="all-users-table">
+          <thead id="all-users-table-header">
+            <tr> <!-- name: "ascending, descending, none" -->
+              <th class="all-users-table-header-col index-col" id="index" name="ascending"><strong>#</strong></th>
+              <th class="all-users-table-header-col firstname-col" id="firstname" name="none"><strong>First Name</strong></th>
+              <th class="all-users-table-header-col lastname-col" id="lastname" name="none"><strong>Last Name</strong></th>
+              <th class="all-users-table-header-col startdate-col" id="startdate" name="none"><strong>Start Date</strong></th>
+              <th class="all-users-table-header-col birthday-col" id="birthday" name="none"><strong>DOB</strong></th>
+              <th class="all-users-table-header-col email-col" id="email" name="none"><strong>Email</strong></th>
+              <th class="all-users-table-header-col phone-col" id="phone" name="none"><strong>Phone</strong></th>
+              <th class="all-users-table-header-col education-col" id="education" name="none"><strong>Education</strong></th>
+              <th class="all-users-table-header-col sex-col" id="sex" name="none"><strong>Sex</strong></th>
+              <th class="all-users-table-header-col position-col" id="position" name="none"><strong>Position</strong></th>
+              <th class="all-users-table-header-col fngroupid-col" id="fngroupid" name="none"><strong>Group</strong></th>
+              <th class="all-users-table-header-col department-col" id="department" name="none"><strong>Department</strong></th>
+              <th class="all-users-table-header-col status-col" id="status" name="none"><strong>Status</strong></th>
+              <th class="all-users-table-header-col office-col" id="office" name="none"><strong>Office</strong></th>
+              <th class="all-users-table-header-col extention-col" id="extention" name="none"><strong>Extention</strong></th>
+            </tr>
+          </thead>
+          <!-- data will dynamically be added in here -->
+          <tbody id="all-users-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ALL USERS TABLE -->

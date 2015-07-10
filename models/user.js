@@ -21,7 +21,7 @@ var userSchema = mongoose.Schema({
   relationship: { type: String, enum: ['Married', 'Single', 'In a Relationship', 'It\'s Complicated', null] },
   department: { type: String, enum: ['Engineering', 'Policy', 'Founders', 'Business', 'Operations', 'Marketing', 'Customer Success', 'Product'] },
   index: { type: Number, min: 0, unique: true }, // index in matrix,
-  employement: { type: String, enum: ['Full-Time', 'Part-Time', 'Intern', 'Unemployed'] },
+  status: { type: String, enum: ['Full-Time', 'Part-Time', 'Intern', 'Inactive'] },
   office: { type: String, enum: ['Washington, D.C.', 'New York City', 'Seoul, Korea', 'Remote'] },
   twitter: String,
   linkedin: String,

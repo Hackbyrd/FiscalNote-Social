@@ -6,17 +6,14 @@
 var express = require('express');
 var router = express.Router();
 
-// require models
+// require controllers
 var users = require('./controllers/users');
+var pages = require('./controllers/pages');
 
-// home page
-router.get('/', function(req, res) {
-  console.log('Home')
-  res.render('index.ejs', {
-    title: "FiscalNote Social",
-    name: 'Jonathan' // change later
-  });
-});
+// Page routes
+router.get('/', pages.index);
+router.get('/home', pages.home);
+// router.get('/fnuser', pages.user);
 
 // User routes
 router.get('/users?', users.getAll);

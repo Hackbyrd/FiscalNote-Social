@@ -7,8 +7,8 @@ var users = {
   // return all users
   getAll: function(req, res) {
 
-    // get what to sort by
-    var sortStr = req.query.sort;
+    // get what to sort by and if same, sort by index
+    var sortStr = (req.query.sort === 'index' || req.query.sort === '-index') ? req.query.sort : (req.query.sort + ' index');
 
     User.find().sort(sortStr).exec(function(err, allUsers) {
       // if error, 500 Internal Server Error
@@ -140,7 +140,7 @@ var users = {
             relationship: newUser.relationship,
             department: newUser.department,
             index: userArr.length,
-            employement: newUser.employement,
+            status: newUser.status,
             office: newUser.office,
             twitter: newUser.twitter,
             linkedin: newUser.linkedin,

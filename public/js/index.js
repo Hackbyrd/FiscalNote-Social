@@ -41,7 +41,7 @@
           rowData += '<th class="all-users-table-body-col">' + (data[i].position || 'Unknown') + '</th>';
           rowData += '<th class="all-users-table-body-col">' + (data[i].fngroupid || 'Unknown') + '</th>';
           rowData += '<th class="all-users-table-body-col">' + (data[i].department || 'Unknown') + '</th>';
-          rowData += '<th class="all-users-table-body-col">' + (data[i].employement || 'Unknown') + '</th>';
+          rowData += '<th class="all-users-table-body-col">' + (data[i].status || 'Unknown') + '</th>';
           rowData += '<th class="all-users-table-body-col">' + (data[i].office || 'Unknown') + '</th>';
           rowData += '<th class="all-users-table-body-col">' + (data[i].extention || 'Unknown') + '</th>';
           rowData += '</tr>';

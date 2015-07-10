@@ -5,20 +5,23 @@ var Match = require('./models/match');
 
 mongoose.connect('mongodb://localhost/FiscalNote-Social');
 
-var _excluded = [2];
-var _included = [1, 52, 41];
+var offices = ['Washington, D.C.', 'New York City', 'Seoul, Korea', 'Remote'];
+var groupSize = 2;
+var departmentWeight = 10;
+var _excluded = [];
+var _included = [];
 var _custom = {
   matches: {
-    0: [1],
-    1: [0]
+    // 0: [1],
+    // 1: [0]
   },
   unmatches: {
-    1: [6]
+    // 1: [6]
   }
 };
 
 // call _match_
-_match_(_excluded, _included, _custom, 'Washington, D.C.', 2, 0, function(err, matches, matrix, people) {
+_match_(_excluded, _included, _custom, offices, groupSize, departmentWeight, function(err, matches, curMatrix, matrix, people) {
   if (err) {
     console.error(err);
   } else {
@@ -26,59 +29,65 @@ _match_(_excluded, _included, _custom, 'Washington, D.C.', 2, 0, function(err, m
     console.log(matches);
 
     var overallMatrix = '';
+    var currentMatrix = '';
 
     for (var i = 0; i < matrix.length; i++) {
       overallMatrix += matrix[i].join(' ');
+      currentMatrix += curMatrix[i].join(' ');
 
       if (i < matrix.length - 1) {
         overallMatrix += '\n';
+        currentMatrix += '\n';
       }
     }
 
+    console.log('overall: \n');
     console.log(overallMatrix);
 
-    // create new match object
-    // var matchObj = new Match({
-    //   totalEmployees: numEmployees,
-    //   current: matchMatrix,
-    //   overall: matchMatrix,
-    //   date: new Date()
-    // });
+    // console.log('current: \n');
+    // console.log(currentMatrix);
+    // console.log(overallMatrix === currentMatrix);
 
-    // // insert new match object
-    // matchObj.save(function(err, doc) {
-    //   if (err) {
-    //     console.error(err);
-    //     process.exit(1); // exit with error
-    //   } else {
-    //     console.log('Inserted Match Object:\n' + doc);
-    //     console.log('-------------------');
-    //   }
-    // });
+    // create new match object
+    var matchObj = new Match({
+      totalEmployees: matrix.length,
+      current: currentMatrix,
+      overall: overallMatrix,
+      date: new Date()
+    });
+
+    // insert new match object
+    matchObj.save(function(err, doc) {
+      if (err) {
+        console.error(err);
+      } else {
+        // console.log('Inserted Match Object:\n' + doc);
+        console.log('-------------------');
+      }
+    });
+
+    // save all people model objects
+    for (var i = 0; i < people.length; i++) {
+      people[i].save();
+    }
+
+    // print out matches
+    for (var key in matches) {
+      var printStr = people[key].email + ': ';
+
+      for (var i = 0; i < matches[key].length; i++) {
+        printStr += people[matches[key][i]].email;
+
+        if (i < matches[key].length - 1) {
+          printStr += ', ';
+        }
+      }
+       console.log(printStr);
+    }
 
   }
 });
 //************* End testing purposes *************//
-
-// shuffles array
-function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}
 
 // generates the matrix
 function genMatrix(callback) {
@@ -135,9 +144,23 @@ function genPeople(callback) {
 
 // generate match
 function genMatch(matrix, people, exclude, include, custom, office, groupSize, departmentWeight, callback) {
-
   var pool = []; // potential pool of match candidates [1, 4, 6, 9] (index 0 is person 1)
   var matches = {}; // object of arrays { 0: [2,3] } person at index 0 is matched with person at index 2 and 3
+  var curMatrix = []; // copy of matrix that shows only these matches
+
+  // empty office return error
+  if (office === null || office.length === 0) {
+    return callback(new Error('Please put an office'));
+  }
+
+  // initialize curMatrix to all zeros
+  for (var i = 0; i < matrix.length; i++) {
+    var zeroArr = [];
+    for (var j = 0; j < matrix[0].length; j++) {
+      zeroArr.push(0);
+    }
+    curMatrix.push(zeroArr);
+  }
 
   // initialize matrix
   for (var i = 0; i < people.length; i++) {
@@ -197,7 +220,7 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
     }
 
     // if person is not in excludes and the office is the same or is in includes
-    if (!(exclude.indexOf(i) >= 0) && (people[i].office === office || (include.indexOf(i) >= 0))) {
+    if (!(exclude.indexOf(i) >= 0) && ((office.indexOf(people[i].office) >= 0) || (include.indexOf(i) >= 0))) {
       pool.push(i);
     }
 
@@ -210,6 +233,7 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
     for (var key in custom.matches) {
       matches[key] = custom.matches[key];
       matrix[key][custom.matches[key][0]]++;
+      curMatrix[key][custom.matches[key][0]]++;
 
       var historyArr = people[key].matches.split(' ');
       for (var e = 0; e < historyArr.length; e++) {
@@ -223,9 +247,6 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
       people[key].matches = historyArr.join(' ');
       pool.splice(pool.indexOf(Number(key)), 1); // remove from pool
     }
-
-    // shuffle pool
-    pool = shuffle(pool);
 
     // keep matching as long as the pool is not empty
     while (pool.length > 0) {
@@ -246,6 +267,13 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
         matrix[b][c]++;
         matrix[c][a]++;
         matrix[c][b]++;
+
+        curMatrix[a][b]++;
+        curMatrix[a][c]++;
+        curMatrix[b][a]++;
+        curMatrix[b][c]++;
+        curMatrix[c][a]++;
+        curMatrix[c][b]++;
 
         // update people
         var aMatchHistoryArr = people[a].matches.split(' ');
@@ -292,7 +320,8 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
         break;
       }
 
-      var matchPerson = pool[0]; // grab first Person in the pool
+      // grab last person so new ppl will more likely get matched with older people
+      var matchPerson = pool[pool.length - 1]; // grab last Person in the pool
       var matchPersonArr = people[matchPerson].matches.split(' '); // grab first persons history array of matches. This is in string form, must convert to int
 
       // convert strings to numbers in array
@@ -300,7 +329,7 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
         matchPersonArr[i] = Number(matchPersonArr[i]);
       }
 
-      pool.splice(0, 1); // remove first Person from pool
+      pool.splice(pool.length - 1, 1); // remove first Person from pool
 
       var bestCandidateIndex = 0; // the current person index of the pool being looped through
       var matchPersonMatchCount = matchPersonArr[pool[bestCandidateIndex]]; // the least amount of matches so far
@@ -326,15 +355,19 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
           break;
         }
 
+        // the number of matches the current person has with this person
+        // the weight is added if they are in the same department
+        var numMatches = (people[pool[i]].department === people[matchPerson].department) ? (matchPersonArr[pool[i]] + departmentWeight) : matchPersonArr[pool[i]];
+
         // check if number of matches with this person is less than current count
-        if (matchPersonArr[pool[i]] < matchPersonMatchCount) {
+        if (numMatches < matchPersonMatchCount) {
 
           randCount = 1; // reset this count because found something lower
           matchPersonMatchCount = matchPersonArr[pool[i]]; // set the match count to what was just found cuz its lower
           bestCandidateIndex = i; // update best candidate
 
         // check if number of matches with this person is greater than current count
-        } else if (matchPersonArr[pool[i]] === matchPersonMatchCount) {
+        } else if (numMatches === matchPersonMatchCount) {
 
           randCount++; // update randCount
 
@@ -371,6 +404,9 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
       matrix[matchPerson][foundPerson]++;
       matrix[foundPerson][matchPerson]++;
 
+      curMatrix[matchPerson][foundPerson]++;
+      curMatrix[foundPerson][matchPerson]++;
+
       // update people objects
       people[matchPerson].matches = matchPersonArr.join(' ');
       people[foundPerson].matches = foundPersonArr.join(' ');
@@ -388,7 +424,7 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
   }
 
   // call callback passing in updated matches, matrix and people
-  callback(null, matches, matrix, people);
+  callback(null, matches, curMatrix, matrix, people);
 } // end genMatch
 
 /* Description: Create matches for the whole team.
@@ -418,11 +454,11 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
 function _match_(exclude, include, custom, office, groupSize, departmentWeight, callback) {
   genMatrix(function(err, matrix) {
     genPeople(function(err, people) {
-      genMatch(matrix, people, exclude, include, custom, office, groupSize, departmentWeight, function(err, matches, matrix, people) {
+      genMatch(matrix, people, exclude, include, custom, office, groupSize, departmentWeight, function(err, matches, curMatrix, matrix, people) {
         if (err) {
           return callback(err);
         }
-        callback(null, matches, matrix, people);
+        callback(null, matches, curMatrix, matrix, people);
       });
     });
   });

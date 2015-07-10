@@ -9,6 +9,7 @@ var session = require('express-session');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var viewEngine = require('ejs-mate'); // https://www.npmjs.com/package/ejs-mate
 
 // require custom modules
 
@@ -31,7 +32,9 @@ app.use(session({ secret: 'anystringoftext', saveUninitialized: true, resave: tr
 app.use('/', require(__dirname + '/routes')); // router
 
 // set view engine
+app.engine('ejs', viewEngine);
 app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
 
 // public/static files
 app.use(express.static(__dirname + '/public'));
