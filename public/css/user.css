@@ -1,0 +1,13 @@
+.line {
+  margin: 15px 0px;
+  height: 1px;
+  background-color: gray;
+}
+
+#user-col-left-info-box {
+  border: 1px gray solid;
+  color: gray;
+  min-height: 50px;
+  margin: 15px 0px 0px 0px;
+  padding: 10px;
+}

@@ -138,10 +138,10 @@ function loadData(filename, mongoose) {
 
         // create match object
         var matchObj = new Match({
-          totalEmployees: numEmployees,
+          totalEmployees: 40,
           current: matchMatrix,
           overall: matchMatrix,
-          date: new Date()
+          date: new Date('2/1/2015')
         });
 
         // insert match object

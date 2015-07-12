@@ -2,7 +2,25 @@ body {
   padding-top: 75px;
 }
 
-/* orange: #ff7300;
-  light-purple: #846f94;
-  dark-purple: #793c82;
- */
+.fn-dark-purple {
+  color: #793c82;
+}
+
+.fn-light-purple {
+  color: #846f94;
+}
+
+.fn-orange {
+  color: #ff7300;
+}
+
+.fn-orange-btn {
+  background-color: #ff7300;
+  color: white;
+  border: 1px #ff7300 solid;
+}
+
+.fn-orange-btn:hover {
+  background-color: white;
+  color: #ff7300;
+}

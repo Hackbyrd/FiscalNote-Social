@@ -34,6 +34,8 @@
           var startdate = new Date(data[i].startdate);
           var birthday = new Date(data[i].birthday);
 
+          // TODO: This link doesn't work
+          rowData += '<a href="/fnuser/' + data[i].index + '">';
           rowData += '<tr class="all-users-table-body-row" id="' + data[i].index + '">';
           rowData += '<td class="all-users-table-body-col index-col">' + (data[i].index + 1) + '</td>';
           rowData += '<td class="all-users-table-body-col firstname-col">' + (data[i].firstname || 'Unknown') + '</td>';
@@ -50,7 +52,7 @@
           rowData += '<td class="all-users-table-body-col status-col">' + (data[i].status || 'Unknown') + '</td>';
           rowData += '<td class="all-users-table-body-col office-col">' + (location[data[i].office] || 'Unknown') + '</td>';
           rowData += '<td class="all-users-table-body-col extention-col">' + (data[i].extention || 'Unknown') + '</td>';
-          rowData += '</tr>';
+          rowData += '</tr></a>';
         }
 
         rowData += '</tbody>';
@@ -115,6 +117,11 @@
       // call get all users function, and change to purple
       getAllUsers(params);
 
+    });
+
+    // when a row is clicked
+    $(document).on('click', '.all-users-table-body-row', function() {
+      window.location.href = window.location.origin + '/fnuser/' + this.id;
     });
 
   });

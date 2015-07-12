@@ -1,20 +1,116 @@
 <% layout('layouts/layout') -%>
 
 <!-- USER: Single User Information -->
-<div class="container hidden" id="user-container">
+<div class="container" id="user-container">
   <div class="row" id="user-row">
-    <div class="col-12-xs col-sm-4 col-md-3" id="user-col-left">
-      <!-- Insert content here -->
-    </div>
-    <div class="col-12-xs col-sm-8 col-md-9" id="user-col-right">
+
+    <!-- Left Column -->
+    <div class="col-xs-12 col-sm-4 col-md-3" id="user-col-left">
       <div class="row">
-        <div class="col-10-xs col-sm-11" id="user-col-right-name">
-        </div>
-        <div class="col-2-xs col-sm-1" id="user-col-right-back">
-          <button class="btn btn-info pull-right">Back</button>
+        <img src="/images/profiles/<%= user.email %>.jpg" alt="<%= (user.firstname || 'Unknown') %> <%= (user.lastname || 'Unknown') %>" class="img-thumbnail">
+      </div>
+      <div class="row">
+        <div class="col-xs-12" id="user-col-left-info-box">
+          <div class="row">
+            <div class="col-xs-4" style="padding-right: 5px;">
+              <b class="pull-right">Email:</b><br/>
+              <b class="pull-right">Started:</b><br/>
+              <b class="pull-right">Status:</b><br/>
+              <b class="pull-right">Group #:</b><br/>
+              <b class="pull-right">Birthday:</b><br/>
+              <b class="pull-right">Phone:</b><br/>
+              <b class="pull-right">Ext #:</b><br/>
+              <b class="pull-right">Gender:</b><br/>
+            </div>
+            <div class="col-xs-8" style="padding-left: 5px;">
+              <span class="pull-left"><%= user.email %></span></br>
+              <span class="pull-left"><%= (function() { var startdate = new Date(user.startdate); return (startdate.getMonth() + 1) + '/' + startdate.getDate() + '/' + startdate.getFullYear();}()) %></span><br/>
+              <span class="pull-left"><%= user.status %></span></br>
+              <span class="pull-left"><%= user.fngroupid %></span></br>
+              <span class="pull-left"><%= (function() { if (!user.birthday) { return 'Unknown' } var birthday = new Date(user.birthday); var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; return (months[birthday.getMonth()]) + ' ' + birthday.getDate();}()) %></span><br/>
+              <span class="pull-left"><%= (user.phone || 'Unknown') %></span><br/>
+              <span class="pull-left"><%= (user.extention || 'Unknown') %></span><br/>
+              <span class="pull-left"><%= (user.sex || 'Unknown')%></span>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- Insert content here -->
     </div>
+
+    <!-- Right Column -->
+    <div class="col-xs-12 col-sm-8 col-md-9" id="user-col-right">
+      <div class="row">
+        <div class="col-10-xs col-sm-11" id="user-col-right-name">
+          <h1 class="fn-light-purple" style="display: inline;">
+            <%= (user.firstname || 'Unknown') + ' ' + (user.lastname || 'Unknown') %>
+          </h1>
+          <h4 class="fn-dark-purple">
+            <%= (user.department || 'Unknown') %> <b class="fn-orange">&nbsp|&nbsp</b> <%= (user.position || 'Unknown') %> <b class="fn-orange">&nbsp|&nbsp</b> <%= (user.office || 'Unknown') %>
+          </h4>
+          <h5 class="fn-light-purple"><%= (user.education || 'Unknown') %> </h5>
+        </div>
+        <div class="col-xs-2 col-sm-1" id="user-col-right-back">
+          <button class="btn fn-orange-btn pull-right" id='user-back-btn'>Back</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="line"></div>
+          <h3 class="text-center" style="margin-left: 15px;"><%= user.firstname + '\'s ' %>Match Record</h3>
+          <br/>
+
+          <!-- table of matches -->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-xs-12 col-sm-4 col-md-6">
+                <h5>Weekly Match-Up History</h5>
+                <% for (var i = 0; i < allMatches.length; i++) { %>
+                  <% var matchRows = allMatches[i].current.split('\n'); %>
+                  <% var matchCol = matchRows[user.index].split(' '); %>
+                  <% var matchIdx = matchCol.indexOf('1'); %>
+                  <% if (matchIdx >= 0) { %>
+                    <div class="line"></div>
+                    <% var curDate = new Date(allMatches[i].date); %>
+                    <% var endDate = new Date(curDate.getTime() + (6 * 24 * 3600 * 1000)); %>
+                    <b><%= (curDate.getMonth() + 1) + '/' + curDate.getDate() + '/' + curDate.getFullYear() + ' - ' + (endDate.getMonth() + 1) + '/' + endDate.getDate() + '/' + endDate.getFullYear()%></b><br/>
+                    <% for (var j = 0; j < matchCol.length; j++) { %>
+                      <% if (matchCol[j] === '1') { %>
+                        <%= users[j].firstname + ' ' + users[j].lastname %><br/>
+                      <% } %>
+                    <% } %>
+                    <br/>
+                  <% } %>
+                <% } %>
+              </div>
+              <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="table">
+                  <table class="table table-condensed table-hover table-bordered">
+                    <thead>
+                      <tr> <!-- name: "ascending, descending, none" -->
+                        <th><strong>#</strong></th>
+                        <th><strong>Name</strong></th>
+                        <th><strong>Count</strong></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for (var i = 0; i < users.length; i++) { %>
+                        <tr>
+                          <td><%= (users[i].index + 1) %></td>
+                          <td><%= users[i].firstname + ' ' + users[i].lastname %></td>
+                          <td><%= matchHistory[i] %></td>
+                        </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END table of matches -->
+
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

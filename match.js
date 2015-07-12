@@ -5,7 +5,8 @@ var Match = require('./models/match');
 
 mongoose.connect('mongodb://localhost/FiscalNote-Social');
 
-var offices = ['Washington, D.C.', 'New York City', 'Seoul, Korea', 'Remote'];
+var office = ['Washington, D.C.', 'New York City', 'Seoul, Korea', 'Remote'];
+var status = ['Full-Time', 'Part-Time', 'Intern', 'Inactive', 'Fired'];
 var groupSize = 2;
 var departmentWeight = 10;
 var _excluded = [];
@@ -21,7 +22,7 @@ var _custom = {
 };
 
 // call _match_
-_match_(_excluded, _included, _custom, offices, groupSize, departmentWeight, function(err, matches, curMatrix, matrix, people) {
+_match_(_excluded, _included, _custom, office, groupSize, departmentWeight, status, function(err, matches, curMatrix, matrix, people) {
   if (err) {
     console.error(err);
   } else {
@@ -143,7 +144,7 @@ function genPeople(callback) {
 } // end genPeople
 
 // generate match
-function genMatch(matrix, people, exclude, include, custom, office, groupSize, departmentWeight, callback) {
+function genMatch(matrix, people, exclude, include, custom, office, groupSize, departmentWeight, status, callback) {
   var pool = []; // potential pool of match candidates [1, 4, 6, 9] (index 0 is person 1)
   var matches = {}; // object of arrays { 0: [2,3] } person at index 0 is matched with person at index 2 and 3
   var curMatrix = []; // copy of matrix that shows only these matches
@@ -219,8 +220,11 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
       return callback(new Error(i + ' cannot be included and excluded at the same time.'));
     }
 
-    // if person is not in excludes and the office is the same or is in includes
-    if (!(exclude.indexOf(i) >= 0) && ((office.indexOf(people[i].office) >= 0) || (include.indexOf(i) >= 0))) {
+    // if person is not excluded AND
+    // person is in this selected office AND the person has the selected status OR
+    // person is in included THEN
+    // ADD to pool
+    if (!(exclude.indexOf(i) >= 0) && ((office.indexOf(people[i].office) >= 0 && status.indexOf(people[i].status) >= 0) || (include.indexOf(i) >= 0))) {
       pool.push(i);
     }
 
@@ -451,10 +455,10 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
  *  departmentWeight  -> Integer to add weight to people in the same department
  *  done              -> Callback function
  */
-function _match_(exclude, include, custom, office, groupSize, departmentWeight, callback) {
+function _match_(exclude, include, custom, office, groupSize, departmentWeight, status, callback) {
   genMatrix(function(err, matrix) {
     genPeople(function(err, people) {
-      genMatch(matrix, people, exclude, include, custom, office, groupSize, departmentWeight, function(err, matches, curMatrix, matrix, people) {
+      genMatch(matrix, people, exclude, include, custom, office, groupSize, departmentWeight, status, function(err, matches, curMatrix, matrix, people) {
         if (err) {
           return callback(err);
         }
