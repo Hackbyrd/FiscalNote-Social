@@ -17,6 +17,47 @@ var pages = {
     });
   },
 
+  team: function(req, res) {
+    console.log('Team');
+    res.render('pages/team', {
+      title: "FiscalNote Social | Team",
+      name: 'Jonathan'
+    });
+  },
+
+  stats: function(req, res) {
+    console.log('Stats');
+    res.render('pages/stats', {
+      title: "FiscalNote Social | Stats",
+      name: 'Jonathan'
+    });
+  },
+
+  matches: function(req, res) {
+    console.log('Matches');
+
+    // get all users
+    User.find().sort('index').exec(function(err, allUsers) {
+      console.log('-------------' + allUsers);
+      // if error, 500 Internal Server Error
+      if (err) {
+        console.error(err);
+        res.status(500);
+        res.json({
+          'status': 500,
+          'message': 'Internal Server Error'
+        });
+      } else {
+        console.log('-------------' + allUsers);
+        res.render('pages/matches', {
+          title: "FiscalNote Social | Matches",
+          name: 'Jonathan',
+          users: allUsers
+        });
+      }
+    });
+  },
+
   user: function(req, res) {
     console.log('User: ' + req.params.id);
 
@@ -100,14 +141,6 @@ var pages = {
     console.log('Stats');
     res.render('pages/stats', {
       title: "FiscalNote Social | Stats",
-      name: 'Jonathan'
-    });
-  },
-
-  matches: function(req, res) {
-    console.log('Matches');
-    res.render('pages/matches', {
-      title: "FiscalNote Social | Matches",
       name: 'Jonathan'
     });
   }

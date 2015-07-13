@@ -13,6 +13,9 @@ var pages = require('./controllers/pages');
 // Page routes
 router.get('/', pages.index);
 router.get('/home', pages.home);
+router.get('/team', pages.team);
+router.get('/stats', pages.stats);
+router.get('/matches', pages.matches);
 router.get('/fnuser/:id', pages.user);
 // router.get('/fnuser', pages.user);
 

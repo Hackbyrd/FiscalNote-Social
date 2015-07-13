@@ -1,0 +1,7 @@
+.all-users-table-header-col, .all-users-table-body-row {
+  cursor: pointer;
+}
+
+.all-users-table-header-col:hover {
+  color: purple;
+}

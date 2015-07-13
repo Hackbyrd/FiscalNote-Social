@@ -1,0 +1,18 @@
+.form-group {
+  margin-right: 10px;
+}
+
+.form-matches {
+  margin-bottom: 15px;
+}
+
+.remove-match {
+  margin-left: 10px;
+  border: 0px solid white;
+  background-color: transparent;
+}
+
+.remove-match:hover {
+  color: #ff7300;
+  cursor: pointer;
+}

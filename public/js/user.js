@@ -3,7 +3,7 @@
 
     // back button is clicked
     $(document).on('click', '#user-back-btn', function() {
-      window.location.href = window.location.origin + '/home';
+      window.location.href = window.location.origin + '/team';
     });
 
   });

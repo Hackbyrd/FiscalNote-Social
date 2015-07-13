@@ -1,0 +1,116 @@
+<% layout('layouts/layout') -%>
+<!-- FISCALNOTERS: ALL USERS TABLE -->
+<div class="container">
+  <div class="row">
+
+    <!-- Exclude List -->
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
+      <h4>Exclude List</h4>
+      <% for (var s = 0; s < users.length; s++) { %>
+         <div class="checkbox">
+          <label>
+            <input class="checkbox-exclude" type="checkbox" value="<%= users[s].index %>">
+            <%= users[s].firstname + ' ' +users[s].lastname %>
+          </label>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Include List -->
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
+      <h4>Include List</h4>
+      <% for (var s = 0; s < users.length; s++) { %>
+         <div class="checkbox">
+          <label>
+            <input class="checkbox-exclude" type="checkbox" value="<%= users[s].index %>">
+            <%= users[s].firstname + ' ' +users[s].lastname %>
+          </label>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Custom Matches -->
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6">
+      <h4>Custom Matches</h4>
+      <!-- Insert forms here -->
+      <button class="btn fn-orange-btn" id="add-new-btn">Add New Match/Unmatch</button>
+    </div>
+
+    <!-- More Info -->
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
+      <h4>Office Location</h4>
+      <div class="checkbox">
+        <label>
+          <input checked class="checkbox-office" type="checkbox" value="Washington, D.C.">
+          Washington, D.C.
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input class="checkbox-office" type="checkbox" value="New York City">
+          New York City
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input class="checkbox-office" type="checkbox" value="Seoul, Korea">
+          Seoul, Korea
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input class="checkbox-office" type="checkbox" value="Remote">
+          Remote
+        </label>
+      </div>
+      <h4>Status</h4>
+      <div class="checkbox">
+        <label>
+          <input checked class="checkbox-status" type="checkbox" value="Full-Time">
+          Full-Time
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input class="checkbox-status" type="checkbox" value="Part-Time">
+          Part-Time
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input class="checkbox-status" type="checkbox" value="Intern">
+          Intern
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input class="checkbox-status" type="checkbox" value="Inactive">
+          Inactive
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input class="checkbox-status" type="checkbox" value="Fired">
+          Fired
+        </label>
+      </div>
+      <h4>Group Size</h4>
+      <label class="radio-inline">
+        <input class="radio-group-size" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="2" checked> 2
+      </label>
+      <label class="radio-inline">
+        <input class="radio-group-size" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="3" disabled> 3
+      </label>
+      <h4>Department Weight</h4>
+      <select class="form-control" id="select-department-weight">
+        <option selected="selected">0</option>
+        <% for (var s = 1; s < 31; s++) { %>
+          <option><%= s %></option>
+        <% } %>
+      </select>
+      <br/>
+      <button class="btn fn-orange-btn" id="run-match">Run Match</button>
+    </div>
+  </div>
+</div>
+<!-- ALL USERS TABLE -->
