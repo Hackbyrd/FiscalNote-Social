@@ -9,6 +9,7 @@ var router = express.Router();
 // require controllers
 var users = require('./controllers/users');
 var pages = require('./controllers/pages');
+var matches = require('./controllers/matches');
 
 // Page routes
 router.get('/', pages.index);
@@ -27,5 +28,6 @@ router.put('/user/:_id', users.update);
 router.delete('/user/:id', users.delete);
 
 // Match routes
+router.post('/match', matches.match);
 
 module.exports = router;

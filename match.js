@@ -1,93 +1,97 @@
-//************* testing purposes *************//
-var mongoose = require('mongoose');
+// //************* testing purposes *************//
+// var mongoose = require('mongoose');
 var User = require('./models/user');
 var Match = require('./models/match');
 
-mongoose.connect('mongodb://localhost/FiscalNote-Social');
+// mongoose.connect('mongodb://localhost/FiscalNote-Social');
 
-var office = ['Washington, D.C.', 'New York City', 'Seoul, Korea', 'Remote'];
-var status = ['Full-Time', 'Part-Time', 'Intern', 'Inactive', 'Fired'];
-var groupSize = 2;
-var departmentWeight = 10;
-var _excluded = [];
-var _included = [];
-var _custom = {
-  matches: {
-    // 0: [1],
-    // 1: [0]
-  },
-  unmatches: {
-    // 1: [6]
-  }
-};
+// // var office = ['Washington, D.C.', 'New York City', 'Seoul, Korea', 'Remote'];
+// var office = ['Washington, D.C.'];
+// // var status = ['Full-Time', 'Part-Time', 'Intern', 'Inactive', 'Fired'];
+// var status = ['Full-Time', 'Intern'];
+// var groupSize = 2;
+// var departmentWeight = 10;
+// var _excluded = [16, 28, 42, 13, 57];
+// var _included = [15];
+// var _custom = {
+//   matches: {
+//     1: [43],
+//     43: [1],
+//     12: [50],
+//     50: [12]
+//   },
+//   unmatches: {
+//     // 1: [6]
+//   }
+// };
 
-// call _match_
-_match_(_excluded, _included, _custom, office, groupSize, departmentWeight, status, function(err, matches, curMatrix, matrix, people) {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log('\nMatches:');
-    console.log(matches);
+// // call _match_
+// _match_(_excluded, _included, _custom, office, groupSize, departmentWeight, status, function(err, matches, curMatrix, matrix, people) {
+//   if (err) {
+//     console.error(err);
+//   } else {
+//     console.log('\nMatches:');
+//     console.log(matches);
 
-    var overallMatrix = '';
-    var currentMatrix = '';
+//     var overallMatrix = '';
+//     var currentMatrix = '';
 
-    for (var i = 0; i < matrix.length; i++) {
-      overallMatrix += matrix[i].join(' ');
-      currentMatrix += curMatrix[i].join(' ');
+//     for (var i = 0; i < matrix.length; i++) {
+//       overallMatrix += matrix[i].join(' ');
+//       currentMatrix += curMatrix[i].join(' ');
 
-      if (i < matrix.length - 1) {
-        overallMatrix += '\n';
-        currentMatrix += '\n';
-      }
-    }
+//       if (i < matrix.length - 1) {
+//         overallMatrix += '\n';
+//         currentMatrix += '\n';
+//       }
+//     }
 
-    console.log('overall: \n');
-    console.log(overallMatrix);
+//     console.log('overall: \n');
+//     console.log(overallMatrix);
 
-    // console.log('current: \n');
-    // console.log(currentMatrix);
-    // console.log(overallMatrix === currentMatrix);
+//     // console.log('current: \n');
+//     // console.log(currentMatrix);
+//     // console.log(overallMatrix === currentMatrix);
 
-    // create new match object
-    var matchObj = new Match({
-      totalEmployees: matrix.length,
-      current: currentMatrix,
-      overall: overallMatrix,
-      date: new Date()
-    });
+//     // create new match object
+//     var matchObj = new Match({
+//       totalEmployees: matrix.length,
+//       current: currentMatrix,
+//       overall: overallMatrix,
+//       date: new Date()
+//     });
 
-    // insert new match object
-    matchObj.save(function(err, doc) {
-      if (err) {
-        console.error(err);
-      } else {
-        // console.log('Inserted Match Object:\n' + doc);
-        console.log('-------------------');
-      }
-    });
+//     // insert new match object
+//     matchObj.save(function(err, doc) {
+//       if (err) {
+//         console.error(err);
+//       } else {
+//         // console.log('Inserted Match Object:\n' + doc);
+//         console.log('-------------------');
+//       }
+//     });
 
-    // save all people model objects
-    for (var i = 0; i < people.length; i++) {
-      people[i].save();
-    }
+//     // save all people model objects
+//     for (var i = 0; i < people.length; i++) {
+//       people[i].save();
+//     }
 
-    // print out matches
-    for (var key in matches) {
-      var printStr = people[key].email + ': ';
+//     // print out matches
+//     for (var key in matches) {
+//       var printStr = people[key].email + ': ';
 
-      for (var i = 0; i < matches[key].length; i++) {
-        printStr += people[matches[key][i]].email;
+//       for (var i = 0; i < matches[key].length; i++) {
+//         printStr += people[matches[key][i]].email;
 
-        if (i < matches[key].length - 1) {
-          printStr += ', ';
-        }
-      }
-       console.log(printStr);
-    }
+//         if (i < matches[key].length - 1) {
+//           printStr += ', ';
+//         }
+//       }
+//        console.log(printStr);
+//     }
 
-  }
-});
+//   }
+// });
 //************* End testing purposes *************//
 
 // generates the matrix
@@ -178,6 +182,7 @@ function genMatch(matrix, people, exclude, include, custom, office, groupSize, d
 
     // check to see if custom matches are compliant to the groupSize
     if (custom.matches[key].length !== (groupSize - 1)) {
+      console.log(custom.matches);
       return callback(new Error('custom.matches [' + custom.matches[key] + '] array length must equal ' + (groupSize - 1)));
     }
 

@@ -1,7 +1,36 @@
 <% layout('layouts/layout') -%>
-<!-- FISCALNOTERS: ALL USERS TABLE -->
+
 <div class="container">
-  <div class="row">
+
+  <!-- SHOW MATCHES -->
+  <div class="row" id="show-matches">
+    <!-- Insert new matches here -->
+    <div class="col-xs-8 col-sm-10">
+      <% for (var i = 0; i < matches.length - 1; i++) { %>
+        <% var curDate = new Date(matches[i].date); %>
+        <% var endDate = new Date(curDate.getTime() + (6 * 24 * 3600 * 1000)); %>
+        <h4><u><%= (curDate.getMonth() + 1) + '/' + curDate.getDate() + '/' + curDate.getFullYear() + ' - ' + (endDate.getMonth() + 1) + '/' + endDate.getDate() + '/' + endDate.getFullYear()%></u></h4>
+        <h5><%= matches[i].totalEmployees %> Employees</h5>
+        <p>
+          <% for (var j = 0; j < matches[i].totalEmployees; j++) { %>
+            <%= arrMatch[i][j] %><br/>
+          <% } %>
+        </p>
+        <hr/>
+      <% } %>
+    </div>
+    <div class="col-xs-4 col-sm-2">
+      <button class="btn fn-orange-btn pull-right" id="create-match-btn">Create Match</button>
+    </div>
+  </div>
+
+  <!-- CREATE MATCH -->
+  <div class="row hidden" id="create-match">
+
+    <!-- Show matches button -->
+    <div class="col-xs-12">
+      <button class="btn fn-orange-btn pull-right" id="show-matches-btn">Show Matches</button>
+    </div>
 
     <!-- Exclude List -->
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
@@ -22,7 +51,7 @@
       <% for (var s = 0; s < users.length; s++) { %>
          <div class="checkbox">
           <label>
-            <input class="checkbox-exclude" type="checkbox" value="<%= users[s].index %>">
+            <input class="checkbox-include" type="checkbox" value="<%= users[s].index %>">
             <%= users[s].firstname + ' ' +users[s].lastname %>
           </label>
         </div>

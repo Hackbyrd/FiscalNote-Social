@@ -48,11 +48,57 @@ var pages = {
           'message': 'Internal Server Error'
         });
       } else {
-        console.log('-------------' + allUsers);
-        res.render('pages/matches', {
-          title: "FiscalNote Social | Matches",
-          name: 'Jonathan',
-          users: allUsers
+        Match.find().sort('-date').exec(function(err, allMatches) {
+
+          var arr = [];
+
+          for (var i = 0; i < allMatches.length; i++) {
+            var rowsArr = allMatches[i].current.split('\n');
+            var strArr = [];
+
+            console.log('rowsArr: ' + rowsArr.length);
+
+            for (var e = 0; e < rowsArr.length; e++) {
+              var colsArr = rowsArr[e].split(' ');
+              console.log('colsArr: ' + colsArr.length);
+
+              var str = allUsers[e].firstname + ' ' + allUsers[e].lastname + ': ';
+              var count = 0;
+
+              for (var j = 0; j < colsArr.length; j++) {
+                console.log('colsArr[j]: ' + colsArr[j].length);
+                if (colsArr[j] === '1') {
+
+                  if (count > 0) {
+                    str += ', ' + allUsers[j].firstname + ' ' + allUsers[j].lastname;
+                  } else {
+                    str += allUsers[j].firstname + ' ' + allUsers[j].lastname;
+                  }
+
+                  count++;
+                }
+              }
+
+              if (count === 0) {
+                str += 'No Match';
+              }
+
+              strArr.push(str);
+
+            }
+
+            arr.push(strArr);
+
+          }
+
+          res.status(200);
+          res.render('pages/matches', {
+            title: "FiscalNote Social | Matches",
+            name: 'Jonathan',
+            users: allUsers,
+            matches: allMatches,
+            arrMatch: arr
+          });
         });
       }
     });
